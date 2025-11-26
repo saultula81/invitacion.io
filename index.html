@@ -4,17 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Metadatos para vista previa en redes sociales (WhatsApp, etc.) -->
     <meta property="og:title" content="¡Tienes una Invitación Especial!" />
     <meta
       property="og:description"
       content="Haz clic en el sello para abrir el sobre y descubrir los detalles."
     />
-    <!-- NOTA: Para que la imagen funcione en WhatsApp, la invitación debe estar en un servidor y esta URL debe ser completa (ej: https://tusitio.com/sello.png) -->
-    <meta property="og:image" content="sello.png" />
+    <meta property="og:image" content="https://saultula81.github.io/invitacion.io/sello.png" />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://saultula81.github.io/invitacion.io/" />
 
-    <!-- Librería para el efecto de confeti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
     <title>¡Tienes una Invitación!</title>
@@ -178,9 +176,8 @@
       </div>
 
       <div class="invitation-card" id="invitationCard">
-        <!-- La imagen de la invitación reemplaza todo el contenido anterior -->
         <img src="tarj.png" alt="Invitación" class="invitation-image" />
-        <audio id="background-music" loop></audio>
+        <audio id="background-music" loop src="1.mp3"></audio>
       </div>
     </div>
 
