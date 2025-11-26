@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editor de Invitaciones</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f4f4f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
+      .editor-panel {
+        background: white;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        width: 100%;
+      }
+      h1 {
+        color: #8a2be2;
+        text-align: center;
+        margin-bottom: 25px;
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: bold;
+      }
+      input[type="text"],
+      input[type="tel"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+      }
+      input[type="text"]:focus,
+      input[type="tel"]:focus {
+        border-color: #8a2be2;
+        outline: none;
+      }
+      button {
+        width: 100%;
+        background-color: #25d366;
+        color: white;
+        padding: 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-top: 10px;
+      }
+      button:hover {
+        background-color: #1da851;
+      }
+      #result-container {
+        margin-top: 20px;
+        text-align: center;
+        display: none;
+      }
+      #download-button {
+        background-color: #8a2be2;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 18px;
+        font-weight: bold;
+        display: inline-block;
+        transition: background-color 0.3s;
+      }
+      #download-button:hover {
+        background-color: #7125b0;
+      }
+      #result-info {
+        word-wrap: break-word;
+        background: #eee;
+        padding: 10px;
+        border-radius: 5px;
+        color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="editor-panel">
+      <h1>Editor de Invitación</h1>
+      <form id="editor-form">
+        <div class="form-group">
+          <label for="honoree-name">Nombre del Agasajado/a:</label>
+          <input
+            type="text"
+            id="honoree-name"
+            value="¡Estás Invitado! 🎉"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="event-title">Título de la Celebración:</label>
+          <input
+            type="text"
+            id="event-title"
+            value="Mi Gran Celebración"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="event-datetime">Fecha y Hora del Evento:</label>
+          <input type="datetime-local" id="event-datetime" required />
+        </div>
+        <div class="form-group">
+          <label for="event-venue">Lugar (Salón):</label>
+          <input
+            type="text"
+            id="event-venue"
+            value='Salón "Las Palmas"'
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="event-address">Dirección:</label>
+          <input
+            type="text"
+            id="event-address"
+            value="Calle Falsa 123, Ciudad"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="background-image-url"
+            >URL de la imagen de fondo (opcional):</label
+          >
+          <input
+            type="text"
+            id="background-image-url"
+            placeholder="https://ejemplo.com/imagen.jpg"
+          />
+        </div>
+        <div class="form-group">
+          <label for="background-music-url"
+            >URL de la música de fondo (MP3, opcional):</label
+          >
+          <input
+            type="text"
+            id="background-music-url"
+            placeholder="https://ejemplo.com/musica.mp3"
+          />
+        </div>
+        <div class="form-group">
+          <label for="whatsapp-number"
+            >Número de WhatsApp para confirmar (con código de país):</label
+          >
+          <input
+            type="tel"
+            id="whatsapp-number"
+            placeholder="Ej: 5491112345678"
+            required
+          />
+        </div>
+        <button type="submit">Generar Enlace de Invitación</button>
+      </form>
+      <div id="result-container">
+        <p><strong>¡Invitación generada!</strong></p>
+        <p>
+          Haz clic en el botón para descargar el archivo
+          <code>invitacion-generada.html</code>.
+        </p>
+        <a id="download-button" href="#" download="invitacion-generada.html"
+          >Descargar Invitación</a
+        >
+      </div>
+    </div>
+
+    <script>
+      document
+        .getElementById("editor-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault(); // Evita que el formulario se envíe de la forma tradicional
+
+          // 1. Obtener los valores del formulario
+          const nombre = document.getElementById("honoree-name").value;
+          const titulo = document.getElementById("event-title").value;
+          const lugar = document.getElementById("event-venue").value;
+          const direccion = document.getElementById("event-address").value;
+          const tel = document.getElementById("whatsapp-number").value;
+          const bgUrl = document.getElementById("background-image-url").value;
+          const musicUrl = document.getElementById(
+            "background-music-url"
+          ).value;
+
+          try {
+            // 2. Cargar el contenido de invitacion.html como plantilla
+            const eventDatetime =
+              document.getElementById("event-datetime").value;
+            if (!eventDatetime) {
+              alert("Por favor, selecciona una fecha y hora para el evento.");
+              return;
+            }
+            const dateObj = new Date(eventDatetime);
+            const optionsDate = {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            };
+            const optionsTime = {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true,
+            };
+            const fechaFormateada = new Intl.DateTimeFormat(
+              "es-ES",
+              optionsDate
+            ).format(dateObj);
+            const horaFormateada = new Intl.DateTimeFormat(
+              "es-ES",
+              optionsTime
+            ).format(dateObj);
+
+            const response = await fetch("invitacion.html");
+            let templateHtml = await response.text();
+
+            // 3. Reemplazar los marcadores de posición con los datos del formulario
+            templateHtml = templateHtml.replace(
+              '<h1 id="honoree-name">¡Estás Invitado! 🎉</h1>',
+              `<h1 id="honoree-name">${nombre}</h1>`
+            );
+            templateHtml = templateHtml.replace(
+              '<h2 id="event-title">Mi Gran Celebración</h2>',
+              `<h2 id="event-title">${titulo}</h2>`
+            );
+            templateHtml = templateHtml.replace(
+              '<span id="event-date">Sábado, 15 de Enero de 2026</span>',
+              `<span id="event-date">${fechaFormateada}</span>`
+            );
+            templateHtml = templateHtml.replace(
+              '<span id="event-time">19:00 hrs</span>',
+              `<span id="event-time">${horaFormateada}</span>`
+            );
+            templateHtml = templateHtml.replace(
+              '<span id="event-venue">Salón "Las Palmas"</span>',
+              `<span id="event-venue">${lugar}</span>`
+            );
+            templateHtml = templateHtml.replace(
+              '<span id="event-address">Calle Falsa 123, Ciudad</span>',
+              `<span id="event-address">${direccion}</span>`
+            );
+
+            // Insertar los datos para el script de la invitación
+            templateHtml = templateHtml.replace(
+              "<body",
+              `<body data-telefono="${tel}" data-bg-url="${bgUrl}" data-event-datetime="${eventDatetime}" data-music-url="${musicUrl}"`
+            );
+
+            // 4. Crear un archivo Blob con el HTML modificado
+            const blob = new Blob([templateHtml], { type: "text/html" });
+            const url = URL.createObjectURL(blob);
+
+            // 5. Mostrar el botón de descarga
+            const downloadButton = document.getElementById("download-button");
+            downloadButton.href = url;
+            document.getElementById("result-container").style.display = "block";
+          } catch (error) {
+            console.error("Error al generar la invitación:", error);
+            alert(
+              "No se pudo generar la invitación. Revisa que 'invitacion.html' esté en la misma carpeta."
+            );
+          }
+        });
+    </script>
+  </body>
+</html>

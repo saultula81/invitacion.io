@@ -1,0 +1,44 @@
+/* Estilos generales del cuerpo */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Times New Roman", serif;
+  background-color: #f7f3e8; /* Fondo color pergamino claro */
+  overflow: hidden; /* Evitar barras de desplazamiento innecesarias */
+}
+
+/* Contenedor principal del sobre */
+#envelope-container {
+  position: relative;
+  width: 350px; /* Ancho del sobre */
+  height: 250px; /* Alto del sobre */
+  background-color: #c9a77c; /* Color del sobre tipo pergamino */
+  border: 1px solid #9f8263;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  perspective: 1000px; /* Necesario para efectos 3D de apertura */
+  cursor: pointer;
+}
+
+/* Estilo para el futuro sello de cera */
+#wax-seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background-color: #960c1d; /* Rojo borgoña del sello */
+  border-radius: 50%;
+  /* Aquí irían más detalles para hacerlo parecer cera */
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  transition: transform 0.5s ease;
+}
+
+/* Estado al pasar el ratón por encima (pista visual de interacción) */
+#wax-seal:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
